@@ -186,7 +186,7 @@ export async function downloadFile(url: string, filename: string) {
 
   return new Promise((resolve, reject) => {
     writer.on("finish", () => {
-      console.log("✔️ İndirildi:", filename);
+      console.log("✔️ Downloaded:", filename);
       resolve(true);
     });
     writer.on("error", reject);
@@ -201,14 +201,14 @@ export async function downloadStories(items: any) {
       const imageUrl = item.image_versions2.candidates[0].url;
       await downloadFile(imageUrl, `${id}.jpg`);
     } else {
-      console.log("⏭️ Resim bulunamadı:", id);
+      console.log("⏭️ Image not found:", id);
     }
 
     if (item.video_versions) {
       const videoUrl = item.video_versions[0].url;
       await downloadFile(videoUrl, `${id}.mp4`);
     } else {
-      console.log("⏭️ Video bulunamadı:", id);
+      console.log("⏭️ Video not found:", id);
     }
   }
 }
