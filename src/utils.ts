@@ -167,11 +167,20 @@ export const getUsernameInfo = async ({
  * @param {string} url - The media URL to download
  * @param {string} filename - The filename to save as
  */
-export async function downloadFile(url: string, filename: string) {
-  const downloadsDir = path.resolve(__dirname, "..", "downloads");
+export async function downloadFile(
+  url: string,
+  filename: string,
+  username: string
+) {
+  const downloadsDir = path.resolve(
+    __dirname,
+    "..",
+    "downloads",
+    username || "unknown"
+  );
 
   if (!fs.existsSync(downloadsDir)) {
-    fs.mkdirSync(downloadsDir);
+    fs.mkdirSync(downloadsDir, { recursive: true });
   }
 
   const writer = fs.createWriteStream(path.join(downloadsDir, filename));
@@ -199,14 +208,14 @@ export async function downloadStories(items: any) {
 
     if (item.image_versions2) {
       const imageUrl = item.image_versions2.candidates[0].url;
-      await downloadFile(imageUrl, `${id}.jpg`);
+      await downloadFile(imageUrl, `${id}.jpg`, item.user.username);
     } else {
       console.log("⏭️ Image not found:", id);
     }
 
     if (item.video_versions) {
       const videoUrl = item.video_versions[0].url;
-      await downloadFile(videoUrl, `${id}.mp4`);
+      await downloadFile(videoUrl, `${id}.mp4`, item.user.username);
     } else {
       console.log("⏭️ Video not found:", id);
     }
